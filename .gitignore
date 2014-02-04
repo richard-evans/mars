@@ -11,3 +11,9 @@
 *.lai
 *.la
 *.a
+
+# Scratch files
+*~
+
+# Executables
+arm
