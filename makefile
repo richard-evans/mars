@@ -16,6 +16,7 @@ GCC_LDFLAGS= -std=c++11 -lstdc++ -I./hdr
 
 # Objects
 OBJECTS= \
+obj/create/create.o \
 obj/main/main.o
 
 EXECUTABLE=arm
