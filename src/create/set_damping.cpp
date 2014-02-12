@@ -11,24 +11,16 @@
 
 // Program headers
 #include "create.hpp"
+#include "vars.hpp"
 
 namespace arm{
 
 //-----------------------------------------------------------------------------
-// Master function to generate grain points, neighbour list and demag tensor
+// Function to set damping constant
 //-----------------------------------------------------------------------------
-void create(){
+double set_damping(int material){
 
-   // Generate grain lattice and neighbourlist
-   arm::create_grain_structure();
-
-   // Calculate grain properties eg anisotropy, Tc dispersion
-   // arm::create_grain_properties();
-
-   // Create demagnetizing field tensor
-   // arm::create_demagnetizing_field_tensor();
-
-   return;
+   return 0.1;
 
 }
 

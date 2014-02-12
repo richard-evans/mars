@@ -11,16 +11,33 @@
 
 // Program headers
 #include "create.hpp"
+#include "vars.hpp"
 
 namespace arm{
 
 //-----------------------------------------------------------------------------
-// Master function to generate grain points, neighbour list and demag tensor
+// Function to generate grain points
 //-----------------------------------------------------------------------------
-void create(){
+void create_grain_structure(){
 
+   // Generate lattice points
+   switch(arm::grain_structure){
+      
+      case(cubic): 
+         arm::create_cubic_grain_structure();
+         break;
+      
+      case(voronoi):
+         arm::create_voronoi_grain_structure();
+         break;
+   
+      default:
+         create_cubic_grain_structure();
+
+   }   
+   
    // Generate grain lattice and neighbourlist
-   arm::create_grain_structure();
+   // arm::create_grain_structure();
 
    // Calculate grain properties eg anisotropy, Tc dispersion
    // arm::create_grain_properties();

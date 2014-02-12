@@ -11,7 +11,7 @@
 #include <iostream>
 
 // Program headers
-
+#include "create.hpp"
 
 int main(){
 
@@ -37,7 +37,7 @@ int main(){
    //arm::initialise(infile);
 
    // Create system
-   //arm::create();
+   arm::create();
 
    // Simulate system
    //arm::simulate();

@@ -11,22 +11,14 @@
 
 // Program headers
 #include "create.hpp"
+#include "vars.hpp"
 
 namespace arm{
 
 //-----------------------------------------------------------------------------
-// Master function to generate grain points, neighbour list and demag tensor
+// Function to set magnetization direction
 //-----------------------------------------------------------------------------
-void create(){
-
-   // Generate grain lattice and neighbourlist
-   arm::create_grain_structure();
-
-   // Calculate grain properties eg anisotropy, Tc dispersion
-   // arm::create_grain_properties();
-
-   // Create demagnetizing field tensor
-   // arm::create_demagnetizing_field_tensor();
+void set_magnetization_direction(int material, double& mx, double& my, double& mz){
 
    return;
 
