@@ -8,10 +8,11 @@
 //-----------------------------------------------------------------------------
 
 // System headers
-#include <vector>
 
 // Program headers
 
+#ifndef GRAIN_H_
+#define GRAIN_H_
 //-----------------------------------------------------------------------------
 // Class containing grain properties
 //-----------------------------------------------------------------------------
@@ -30,7 +31,7 @@ class grain_t {
       // static grain properties
       double volume; // nm^3
 
-      double alpha; // damping constant
+      double damping; // damping constant
       double Tc; // Curie temperature K
 
       double mx; // magnetization unit vector
@@ -57,9 +58,4 @@ class grain_neighbour_t {
 
 };
 
-/*namespace arm{
-
-   extern std::vector<grain_static_t> grains;
-   extern std::vector<grain_neighbour_t> grain_neighbours; // vector of grain_neighbour_t
-
-}*/
+#endif /*GRAIN_H_*/
