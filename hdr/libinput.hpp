@@ -364,7 +364,7 @@ public:
 
    // interface functions to parse input file
    //void parser(std::string& input_file_text);
-   void parse(std::ifstream& input_file_stream);
+   bool parse(std::ifstream& input_file_stream);
 
    // interface functions for setting separator characters
    void set_unit_separator(std::string unit_separator_character);
@@ -401,7 +401,7 @@ private:
   std::string keyword_separator; // = ":"
    
    // internal class functions
-   void parse_line(std::string& line, int line_number);
+   bool parse_line(std::string& line, int line_number);
    libinput::line_variables_t extract_parameters_from_line(std::string& line, int line_number);
    
 };   

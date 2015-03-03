@@ -44,10 +44,16 @@ namespace mars{
       ifile.open("input");
 
       // process input file to set program parameters
-      mars::interface::parameters.parse(ifile);
+      bool parse_error = mars::interface::parameters.parse(ifile);
 
       // close input file
       ifile.close();
+
+      // check for parse error
+      if(parse_error){
+	std::cerr << "Fatal error: exiting program" << std::endl;
+	exit(1);
+      }
 
       return;
 

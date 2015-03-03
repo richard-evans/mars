@@ -45,7 +45,7 @@ bool input_keyword_t<T>::match(line_variables_t& test){
 
    // Read string into variable
    stringstr >> converted_value;
-   
+
    //check_value_range(converted_value);
 
    //set_value(converted_value);
@@ -231,12 +231,14 @@ void parameters::unset_verbose_output(){
 //---------------------------------------------------------------
 // Function to parse input file stream for parameters 
 //---------------------------------------------------------------
-void parameters::parse(std::ifstream& ifile){
+bool parameters::parse(std::ifstream& ifile){
+
+   bool parse_error = false;
 
    // check file is open
    if(!ifile.is_open()){
       std::cerr << "Error input file stream is not open: unable to process input file parameters" << std::endl;
-      return;
+      return true; // same effect as a parse error
    }
    
    // declare line counter variable
@@ -252,14 +254,17 @@ void parameters::parse(std::ifstream& ifile){
       if(parameters::verbose) std::cout << line_counter << "\t" << line << std::endl;
 
       // pass each line to parser
-      parameters::parse_line(line,line_counter);
+      bool line_parse_error = parameters::parse_line(line,line_counter);
+
+      // check for error
+      if(line_parse_error) parse_error = true;
       
       // increment line number
       line_counter++;
 
    }
 
-   return;
+   return parse_error;
 
 }
 
@@ -291,7 +296,10 @@ std::string parameters::get_manual(std::string keyword){
 
 }
 
-void parameters::parse_line(std::string& line, int line_number){
+bool parameters::parse_line(std::string& line, int line_number){
+
+   // bool to check for parse error
+   bool parse_error=false;
 
    // loop over all lines in file
 
@@ -355,7 +363,11 @@ void parameters::parse_line(std::string& line, int line_number){
    if(!match_found){
       std::cerr << "Error! No matching parameter found for keyword '" << line_contents.keyword << "' on line ";
       std::cerr << line_contents.line_number << " of input file." << std::endl;
+      parse_error = true;
    }
+
+   return parse_error;
+
 }
 
 libinput::line_variables_t parameters::extract_parameters_from_line(std::string& line, int line_number){
