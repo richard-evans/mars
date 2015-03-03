@@ -27,7 +27,7 @@ namespace mars{
       double system_size_z;
 
       double grain_size; //nm
-      double grain_spacing; //nm   
+      double grain_spacing; //nm
       
     } // end of namespace create
     

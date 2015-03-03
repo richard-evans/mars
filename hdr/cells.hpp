@@ -75,7 +75,7 @@ namespace mars{
     //-----------------------------------------------------------------------------
 
     extern std::vector<vec_t> m;
-    extern std::vector<vec_t> h
+    extern std::vector<vec_t> h;
     extern std::vector<double> temperature;
 
     extern std::vector<cell_constants_t> constants;

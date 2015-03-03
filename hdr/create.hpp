@@ -26,6 +26,7 @@ namespace mars{
   namespace create{
 
     void initialise();
+    void initialise_interface();
 
   }
 

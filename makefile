@@ -11,15 +11,16 @@ GCC=g++-mp-4.7
 LIBS=-lstdc++
 
 # Performance Flags
-GCC_CFLAGS= -std=c++11 -Wall -O3 -falign-labels -falign-loops -funroll-all-loops -fexpensive-optimizations -funroll-loops -I./hdr
-GCC_LDFLAGS= -std=c++11 -lstdc++ -I./hdr -Wall
+GCC_CFLAGS= -std=c++11 -Wall -O3 -falign-labels -falign-loops -funroll-all-loops -fexpensive-optimizations -funroll-loops -I./hdr -I./libinput
+GCC_LDFLAGS= -std=c++11 -lstdc++ -I./hdr -Wall -I./libinput
 
 # Objects
 OBJECTS=
 
 include src/cells/makefile
 include src/create/makefile
-include src/input/makefile
+include src/interface/makefile
+include src/libinput/makefile
 include src/main/makefile
 include src/utility/makefile
 

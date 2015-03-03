@@ -12,6 +12,7 @@
 
 // Program headers
 #include "create.hpp"
+#include "interface.hpp"
 
 int main(){
 
@@ -37,8 +38,11 @@ int main(){
    std::cout << std::endl;
    std::cout << "--------------------------------------------------------------------------------" << std::endl;
 
-   // Initialise system
-   //mars::input::initialise(infile);
+   // Initialise program interface
+   mars::interface::initialise();
+
+   // Process input file to set program parameters
+   mars::interface::read_input_file();
 
    // Create system
    mars::create::initialise();

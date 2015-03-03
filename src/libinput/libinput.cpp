@@ -1,18 +1,13 @@
 //-----------------------------------------------------------------------------
 //
-// This header file is part of the input open source library under the
+// This source file is part of the libinput open source library under the
 // BSD (2-clause) licence (see LICENCE file for details).
 //
 // (c) R F L Evans 2014. All rights reserved.
 //
 //-----------------------------------------------------------------------------
 //
-//  Shared class definition for parameter set
-//
 //-----------------------------------------------------------------------------
-
-#ifndef INPUT_PARAMETERS_H_
-#define INPUT_PARAMETERS_H_
 
 // Standard library headers
 #include <algorithm>
@@ -21,86 +16,127 @@
 #include <sstream>
 #include <vector>
 
-// input library headers
-#include "keywords.hpp"
-#include "vectors.hpp"
-#include "tensors.hpp"
+// libinput header
+#include "libinput.hpp"
 
 //-----------------------------------------------------------------------------
-// All functions and classes encapsulated in input namespace
+// All functions and classes encapsulated in libinput namespace
 //-----------------------------------------------------------------------------
-namespace input{
+namespace libinput{
+
+//--------------------------------------------------------------
+// Default templated class functions
+//--------------------------------------------------------------
    
+//---------------------------------------------------------
+// Function to check for matching keyword and assign value
+//---------------------------------------------------------
+template <class T>
+bool input_keyword_t<T>::match(line_variables_t& test){
+
+   // Test for match, if false return
+   if(test.keyword!=this->keyword) return false;
+
+   // Match found, now process for unit conversion and variable assignment
+   T converted_value;
+
+   // Use stringstreams for general variable interpretation
+   std::stringstream stringstr(test.value);
+
+   // Read string into variable
+   stringstr >> converted_value;
+   
+   //check_value_range(converted_value);
+
+   //set_value(converted_value);
+   assign_to_variable(converted_value);
+
+   // return true for matching keyword
+   return true;
+
+}
+
+//-------------------------------------------
+// Function to check value is in range
+//-------------------------------------------
+template <class T>
+bool input_keyword_t<T>::in_range(T value){
+   if(value >= minimum_value && value <= maximum_value) return true;
+   else return false;
+}
+
+//-------------------------------------------
+// Function to assign value to variable
+//-------------------------------------------
+template <class T>
+void input_keyword_t<T>::assign_to_variable(T value){
+   *variable_memory_address = value; // assign contents of value to location pointed to by variable_memory_address
+   return;
+}
+   
+//--------------------------------------------------------------
+// Function specialization of only certain functions
+//
+// see http://stackoverflow.com/a/3911108
+//
+//--------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// template specialisation for bool
+//-----------------------------------------------------------------------------
+template<>
+bool input_keyword_t<bool>::in_range(bool value){
+   return true;
+}
+
+//-----------------------------------------------------------------------------
+// template specialisation for std::string
+//-----------------------------------------------------------------------------
+template<>
+bool input_keyword_t<std::string>::in_range(std::string value){
+   if(value.size() <=256) return true;
+   else return false;
+}
+
+//vector --
+//matrix -- check all elements
+
+//-----------------------------------------------------------------------------
+// class template specialisation for bool (for info)
+//-----------------------------------------------------------------------------
+/*template <> class input_keyword_t<bool> : public input_keyword_base_t<bool>
+{
+    public:
+   // constructor (passes arguments to base constructor)
+   input_keyword_t (std::string ckeyword, bool cminimum_value, bool cmaximum_value, bool& cvariable) : 
+      input_keyword_base_t<bool>(ckeyword, cminimum_value,cmaximum_value, cvariable) {}
+
+   bool in_range(bool value){
+      return true;
+   }
+   
+   // must define other templated functions here
+};*/
+
 //---------------------------------------------------------------
-// main class definition of input library
+// Constructor for parameter class
 //---------------------------------------------------------------
-class parameters{
-   
-public:
-   
-   // interface functions for adding parameters
-   //void add_bool_parameter         (std::string parameter_name, input::quantity_t quantity, int& variable, std::string manual_page);
-   //void add_string_parameter       (std::string parameter_name, input::quantity_t quantity, std::string& variable, std::string manual_page);
-   //void add_unsigned_int_parameter (std::string parameter_name, input::quantity_t quantity, unsigned int minimum, unsigned int maximum, unsigned int& variable, std::string manual_page);
-   void add_new_int_parameter          (std::string parameter_name, input::quantity_t quantity, int minimum, int maximum, int& variable, std::string manual_page);
-   //void add_float_parameter        (std::string parameter_name, input::quantity_t quantity, float minimum, float maximum, float& variable, std::string manual_page);
-   //void add_double_parameter       (std::string parameter_name, input::quantity_t quantity, double minimum, double maximum, double& variable, std::string manual_page);
-   //void add_vector_parameter       (std::string parameter_name, input::quantity_t quantity, input::vec_t minimum, input::vec_t maximum, input::vec_t& variable, std::string manual_page);
-   //void add_tensor_parameter       (std::string parameter_name, input::quantity_t quantity, input::ten_t minimum, input::ten_t maximum, input::ten_t& variable, std::string manual_page);
+parameters::parameters(){
 
-   // interface function for adding units
-   void add_new_unit(std::string unit_name, input::quantity_t quantity, double conversion_factor);
-   
-   // interface functions to parse input file
-   //void parser(std::string& input_file_text);
-   void parse(std::ifstream& input_file_stream);
-   
-   // interface functions for setting separator characters
-   void set_unit_separator(std::string unit_separator_character);
-   void set_comment_separator(std::string unit_separator_character);
-   void set_value_separator(std::string unit_separator_character);
-   void set_keyword_separator(std::string unit_separator_character);
+  // set default values
+  parameters::set_value_separator("=");
 
-   // functions to control verbose output
-   void set_verbose_output();
-   void unset_verbose_output();
+  return;
 
-private:
-   
-   // flag to enable verbose output to screen
-   bool verbose;
-   
-   // containers for different parameter types
-   //std::vector<input::input_keyword_t <bool> >         bool_parameters;
-   //std::vector<input::input_keyword_t <unsigned int> > uint_parameters;
-   std::vector<input::input_keyword_t <int> >          int_parameters;
-   //input::input_keyword_t<int> int_parameters;
-   //std::vector<input::input_keyword_t <float> >        float_parameters;
-   //std::vector<input::input_keyword_t <double> >       double_parameters;
-   //std::vector<input::input_keyword_t <input::vec_t> >        vector_parameters;
-   //std::vector<input::input_keyword_t <input::ten_t> >        tensor_parameters;
-   //std::vector<input::input_keyword_t <std::string> >  string_parameters;
-   
-   // 
-  std::string comment_character; // = "#"
-  std::string unit_separator; // = "!"
-  std::string value_separator; // = "="
-  std::string keyword_separator; // = ":"
-   
-   // internal class functions
-   void parse_line(std::string& line, int line_number);
-   input::line_variables_t extract_parameters_from_line(std::string& line, int line_number);
-   
-};   
-
+}
 
 //---------------------------------------------------------------
 // Function to create a new int parameter in parameter list 
 //---------------------------------------------------------------
-void parameters::add_new_int_parameter(std::string parameter_name, input::quantity_t quantity, int minimum, int maximum, int& variable, std::string manual_page){
+void parameters::add_new_int_parameter(std::string parameter_name, libinput::quantity_t quantity, int minimum, int maximum, int& variable, std::string manual_page){
 
    // create temporary keyword variable using kyword class constructor
-   input::input_keyword_t <int> new_int_parameter(parameter_name, minimum, maximum, variable);
+   libinput::input_keyword_t <int> new_int_parameter(parameter_name, minimum, maximum, variable);
 
    // add parameter to list
    parameters::int_parameters.push_back(new_int_parameter);
@@ -111,6 +147,21 @@ void parameters::add_new_int_parameter(std::string parameter_name, input::quanti
 
 //---------------------------------------------------------------
 // Function to create a new int parameter in parameter list 
+//---------------------------------------------------------------
+void parameters::add_new_double_parameter(std::string parameter_name, libinput::quantity_t quantity, double minimum, double maximum, double& variable, std::string manual_page){
+
+   // create temporary keyword variable using kyword class constructor
+   libinput::input_keyword_t <double> new_double_parameter(parameter_name, minimum, maximum, variable);
+
+   // add parameter to list
+   parameters::double_parameters.push_back(new_double_parameter);
+
+   return;
+
+}
+
+//---------------------------------------------------------------
+// Function to set the character separating values (default "=" )
 //---------------------------------------------------------------
 void parameters::set_value_separator(std::string value_separator_character){
 
@@ -198,7 +249,7 @@ void parameters::parse_line(std::string& line, int line_number){
    // loop over all lines in file
 
    // load line from file and extract contents
-   input::line_variables_t line_contents = extract_parameters_from_line(line,line_number);
+   libinput::line_variables_t line_contents = extract_parameters_from_line(line,line_number);
 
    // print lines to screen if verbose output requested
    if(parameters::verbose){
@@ -228,17 +279,17 @@ void parameters::parse_line(std::string& line, int line_number){
       if(match_found) break;
    }
    // loop over all floats
-   /*if(!match_found) for(int i=0; i<float_parameters.size(); ++i){
-      match_found = float_parameters.at(i).match(line_contents);
-      if(match_found) break;
-   }
+   //if(!match_found) for(int i=0; i<float_parameters.size(); ++i){
+   //   match_found = float_parameters.at(i).match(line_contents);
+   //   if(match_found) break;
+   //}
    // loop over all doubles
-   if(!match_found) for(int i=0; i<double_parameters.size(); ++i){
+   if(!match_found) for(unsigned int i=0; i<double_parameters.size(); ++i){
       match_found = double_parameters.at(i).match(line_contents);
       if(match_found) break;
    }
    // loop over all vectors
-   if(!match_found) for(int i=0; i<vector_parameters.size(); ++i){
+   /*if(!match_found) for(int i=0; i<vector_parameters.size(); ++i){
       match_found = vector_parameters.at(i).match(line_contents);
       if(match_found) break;
    }
@@ -260,7 +311,7 @@ void parameters::parse_line(std::string& line, int line_number){
    }
 }
 
-input::line_variables_t parameters::extract_parameters_from_line(std::string& line, int line_number){
+libinput::line_variables_t parameters::extract_parameters_from_line(std::string& line, int line_number){
 
    // Array of string variable to contain parts
    std::vector<std::string> string_array(3,"");
@@ -273,10 +324,10 @@ input::line_variables_t parameters::extract_parameters_from_line(std::string& li
    line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
 
    // Set key characters for separating string to components
-   const char* commentc=parameters::comment_character.c_str();
-   const char* unitc=parameters::unit_separator.c_str();     // Value identifier
-   const char* valuec=parameters::value_separator.c_str();    // Unit identifier
-   const char* keywordc=parameters::keyword_separator.c_str();   // Comment identifier
+   const char* commentc = parameters::comment_character.c_str();
+   const char* unitc    = parameters::unit_separator.c_str();     // Value identifier
+   const char* valuec   = parameters::value_separator.c_str();    // Unit identifier
+   const char* keywordc = parameters::keyword_separator.c_str();   // Comment identifier
 
    // Declare variable to string container index
    unsigned int idx = 0;
@@ -310,7 +361,7 @@ input::line_variables_t parameters::extract_parameters_from_line(std::string& li
    }
 
    // Declare result variable
-   input::line_variables_t result;
+   libinput::line_variables_t result;
 
    // Copy variables from string array
    result.keyword = string_array[0];
@@ -322,6 +373,4 @@ input::line_variables_t parameters::extract_parameters_from_line(std::string& li
 
 }
 
-} // end of namespace input
-
-#endif // _INPUT_PARAMETERS_H_
+} // end of namespace libinput

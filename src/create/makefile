@@ -8,7 +8,8 @@ create.o \
 create_grain_structure.o \
 create_single_grain.o \
 create_cubic_grain_structure.o \
-data.o
+data.o \
+interface.o
 
 #//set_anisotropy.cpp \
 #//set_exchange.cpp \

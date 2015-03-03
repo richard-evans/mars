@@ -7,9 +7,11 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "input.hpp"
-
 // Standard library headers
+
+// Program headers
+#include "create.hpp"
+#include "libinput.hpp"
 
 namespace mars{
   //-----------------------------------------------------------------------------
@@ -18,7 +20,38 @@ namespace mars{
   namespace interface{
 
     // Declare single class variable for input parameters
-    input::parameters mars_input_parameters;
+    libinput::parameters parameters;
+
+    //-----------------------------------------------------------------------------
+    // Wrapper function to initialise input file parameters
+    //-----------------------------------------------------------------------------
+    void initialise(){
+
+      // Call module functions to initialise input file variables
+      mars::create::initialise_interface();
+
+      return;
+
+    }
+
+    //-----------------------------------------------------------------------------
+    // Function to read and process input file
+    //-----------------------------------------------------------------------------
+    void read_input_file(){
+
+      // open input file
+      std::ifstream ifile;
+      ifile.open("input");
+
+      // process input file to set program parameters
+      mars::interface::parameters.parse(ifile);
+
+      // close input file
+      ifile.close();
+
+      return;
+
+    }
 
   }
   /*myprogram_parameters.set_value_separator("=");
