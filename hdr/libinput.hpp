@@ -299,17 +299,19 @@ public:
    std::string manual; // manual entry for keyword
 
    // constructor
-   input_keyword_base_t (std::string ckeyword, T cminimum_value, T cmaximum_value, T& cvariable){
+  input_keyword_base_t (std::string ckeyword, T cminimum_value, T cmaximum_value, T& cvariable, std::string cmanual){
       keyword = ckeyword;
       minimum_value = cminimum_value;
       maximum_value = cmaximum_value;
       variable_memory_address = &cvariable;
+      manual = cmanual;
    }
 
    // pure virtual functions
    virtual bool in_range(T value) = 0;
    virtual void assign_to_variable(T value) = 0;
    virtual bool match(line_variables_t& test) = 0;
+   virtual bool get_manual(std::string keyword, std::string& manual_entry) = 0;
 
 };
 
@@ -326,14 +328,14 @@ template <typename T> class input_keyword_t : public input_keyword_base_t<T>
 
 public:
    // constructor
-   input_keyword_t (std::string ckeyword, T cminimum_value, T cmaximum_value, T& cvariable) : input_keyword_base_t<T>(ckeyword, cminimum_value, cmaximum_value, cvariable) { //, T* cvariable){
+  input_keyword_t (std::string ckeyword, T cminimum_value, T cmaximum_value, T& cvariable, std::string cmanual) : input_keyword_base_t<T>(ckeyword, cminimum_value, cmaximum_value, cvariable, cmanual) { //, T* cvariable){
    }
 
    // templated function declarations
    bool in_range(T value);
    void assign_to_variable(T value);
    bool match(line_variables_t& test);
-
+   bool get_manual(std::string keyword, std::string& manual_entry);
 };
 
 //=========================================================================
@@ -346,7 +348,7 @@ public:
 
    // constructor
    parameters();
-  
+
    // interface functions for adding parameters
    //void add_bool_parameter         (std::string parameter_name, input::quantity_t quantity, int& variable, std::string manual_page);
    //void add_string_parameter       (std::string parameter_name, input::quantity_t quantity, std::string& variable, std::string manual_page);
@@ -359,11 +361,11 @@ public:
 
    // interface function for adding units
    void add_new_unit(std::string unit_name, libinput::quantity_t quantity, double conversion_factor);
-   
+
    // interface functions to parse input file
    //void parser(std::string& input_file_text);
    void parse(std::ifstream& input_file_stream);
-   
+
    // interface functions for setting separator characters
    void set_unit_separator(std::string unit_separator_character);
    void set_comment_separator(std::string unit_separator_character);
@@ -373,6 +375,8 @@ public:
    // functions to control verbose output
    void set_verbose_output();
    void unset_verbose_output();
+
+   std::string get_manual(std::string keyword);
 
 private:
    

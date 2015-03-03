@@ -35,12 +35,22 @@ namespace mars{
 
       // set up input file parameters
       //mars::interface::parameters::add_int_parameter("x-pixels", NONE, 1, 1000000, a);
+
       //  |-----------------------------80 characters wide------------------------------|
       {const char *manual =
-	  "Specifies the size of the system along the x direction.\n"
-	  "Permitted range is 1 nm - 100 um.\n";
+          "\n"
+	  " Syntax:\n\n"
+          "    system-size-x = <x> !<unit>\n\n"
+          " system-size-x specifies the size of the system along the x coordinate\n"
+          " direction. The system size can be specified between 1 nanometre and\n"
+          " 100 micrometres.\n\n"
+	  " The default units are nanometres, but may be set using the optional unit\n"
+	  " character (!). Valid units include nanometres (nm), micrometres (um),\n"
+	  " metres (m) and inches (in).\n\n";
 	mars::interface::parameters.add_new_double_parameter("system-size-x", libinput::NONE, 1, 100000, mars::create::internal::system_size_x, manual);}
 
+      //std::cout << "\033[32m" << "system-size-x" << "\033[0m" << std::endl;
+      //std::cout << mars::interface::parameters.get_manual("system-size-x") << std::endl;
 
       return; 
     }

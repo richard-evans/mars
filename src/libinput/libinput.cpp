@@ -56,6 +56,25 @@ bool input_keyword_t<T>::match(line_variables_t& test){
 
 }
 
+  //-------------------------------------------------------------
+  // Function to check for matching keyword and get manual entry
+  //-------------------------------------------------------------
+  template <class T>
+  bool input_keyword_t<T>::get_manual(std::string keyword, std::string& manual_entry){
+
+    // Test for match, if false return
+    if(keyword!=this->keyword) return false;
+
+    // If match found, copy manual and return
+    manual_entry = this->manual;
+
+    //std::cout << "I am here " << keyword << "\t" << this->keyword << "\t" << this->manual << std::endl;
+
+    // return true for matching keyword
+    return true;
+
+  }
+
 //-------------------------------------------
 // Function to check value is in range
 //-------------------------------------------
@@ -136,7 +155,7 @@ parameters::parameters(){
 void parameters::add_new_int_parameter(std::string parameter_name, libinput::quantity_t quantity, int minimum, int maximum, int& variable, std::string manual_page){
 
    // create temporary keyword variable using kyword class constructor
-   libinput::input_keyword_t <int> new_int_parameter(parameter_name, minimum, maximum, variable);
+   libinput::input_keyword_t <int> new_int_parameter(parameter_name, minimum, maximum, variable, manual_page);
 
    // add parameter to list
    parameters::int_parameters.push_back(new_int_parameter);
@@ -151,7 +170,7 @@ void parameters::add_new_int_parameter(std::string parameter_name, libinput::qua
 void parameters::add_new_double_parameter(std::string parameter_name, libinput::quantity_t quantity, double minimum, double maximum, double& variable, std::string manual_page){
 
    // create temporary keyword variable using kyword class constructor
-   libinput::input_keyword_t <double> new_double_parameter(parameter_name, minimum, maximum, variable);
+  libinput::input_keyword_t <double> new_double_parameter(parameter_name, minimum, maximum, variable, manual_page);
 
    // add parameter to list
    parameters::double_parameters.push_back(new_double_parameter);
@@ -241,6 +260,34 @@ void parameters::parse(std::ifstream& ifile){
    }
 
    return;
+
+}
+
+std::string parameters::get_manual(std::string keyword){
+
+  // result variable
+  std::string manual_page;
+
+  // Ugly but simple loop over all parameters
+  //------------------------------------------------------------------------
+  bool match_found = false;
+
+  // loop over all ints
+  if(!match_found) for(unsigned int i=0; i<int_parameters.size(); ++i){
+      match_found = int_parameters.at(i).get_manual(keyword,manual_page);
+      if(match_found) break;
+  }
+  // loop over all doubles
+  if(!match_found) for(unsigned int i=0; i<double_parameters.size(); ++i){
+      match_found = double_parameters.at(i).get_manual(keyword,manual_page);
+      if(match_found) break;
+  }
+  // Check for no matching parameters and print error message
+  if(!match_found){
+    std::cout << "No manual entry for '" << keyword << "'" << std::endl;
+  }
+
+  return manual_page;
 
 }
 
