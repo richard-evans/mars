@@ -15,22 +15,15 @@ GCC_CFLAGS= -std=c++11 -Wall -O3 -falign-labels -falign-loops -funroll-all-loops
 GCC_LDFLAGS= -std=c++11 -lstdc++ -I./hdr -Wall
 
 # Objects
-OBJECTS= \
-obj/create/create.o \
-obj/create/create_grain_structure.o \
-obj/create/create_cubic_grain_structure.o \
-obj/create/create_voronoi_grain_structure.o \
-obj/create/set_material.o \
-obj/create/set_damping.o \
-obj/create/set_Tc.o \
-obj/create/set_magnetization.o \
-obj/create/set_magnetization_direction.o \
-obj/create/set_anisotropy.o \
-obj/create/set_anisotropy_direction.o \
-obj/data/vars.o \
-obj/main/main.o \
+OBJECTS=
 
-EXECUTABLE=arm
+include src/cells/makefile
+include src/create/makefile
+include src/input/makefile
+include src/main/makefile
+include src/utility/makefile
+
+EXECUTABLE=mars
 
 all: $(OBJECTS) serial
 

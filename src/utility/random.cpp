@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //
-// This source file is part of the ARM open source package under the
+// This source file is part of the MaRS open source package under the
 // BSD (2-clause) licence (see LICENCE file for details).
 //
 // (c) R F L Evans 2014. All rights reserved.
@@ -13,7 +13,7 @@
 
 // Program headers
 
-namespace arm{
+namespace mars{
 
    // Integrator random numbers
    std::mt19937 eng(12345); // This is the Mersenne Twister

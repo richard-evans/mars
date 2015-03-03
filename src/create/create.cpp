@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //
-// This source file is part of the ARM open source package under the
+// This source file is part of the MaRS open source package under the
 // BSD (2-clause) licence (see LICENCE file for details).
 //
 // (c) R F L Evans 2014. All rights reserved.
@@ -11,25 +11,24 @@
 
 // Program headers
 #include "create.hpp"
+#include "internal.hpp"
 
-namespace arm{
+namespace mars{
 
-//-----------------------------------------------------------------------------
-// Master function to generate grain points, neighbour list and demag tensor
-//-----------------------------------------------------------------------------
-void create(){
+  namespace create{
 
-   // Generate grain lattice and neighbourlist
-   arm::create_grain_structure();
+    //-----------------------------------------------------------------------------
+    // Master function to initialise cell properties
+    //-----------------------------------------------------------------------------
+    void initialise(){
 
-   // Calculate grain properties eg anisotropy, Tc dispersion
-   // arm::create_grain_properties();
+      // Generate grain lattice and neighbourlist
+      mars::create::internal::create_grain_structure();
 
-   // Create demagnetizing field tensor
-   // arm::create_demagnetizing_field_tensor();
+      return;
 
-   return;
+    }
 
-}
+  } // End of create namespace
 
-}
+} // End of mars namespace

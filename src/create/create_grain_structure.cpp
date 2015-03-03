@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 //
-// This source file is part of the ARM open source package under the
+// This source file is part of the MaRS open source package under the
 // BSD (2-clause) licence (see LICENCE file for details).
 //
 // (c) R F L Evans 2014. All rights reserved.
@@ -11,42 +11,45 @@
 
 // Program headers
 #include "create.hpp"
-#include "vars.hpp"
+#include "internal.hpp"
 
-namespace arm{
+namespace mars{
 
-//-----------------------------------------------------------------------------
-// Function to generate grain points
-//-----------------------------------------------------------------------------
-void create_grain_structure(){
+  namespace create{
 
-   // Generate lattice points
-   switch(arm::grain_structure){
-      
-      case(cubic): 
-         arm::create_cubic_grain_structure();
-         break;
-      
-      case(voronoi):
-         arm::create_voronoi_grain_structure();
-         break;
-   
-      default:
-         create_cubic_grain_structure();
+    namespace internal{
 
-   }   
-   
-   // Generate grain lattice and neighbourlist
-   // arm::create_grain_structure();
+      //-----------------------------------------------------------------------------
+      // Function to generate grain points
+      //-----------------------------------------------------------------------------
+      void create_grain_structure(){
 
-   // Calculate grain properties eg anisotropy, Tc dispersion
-   // arm::create_grain_properties();
+	// Generate lattice points
+	switch(mars::create::internal::grain_structure){
 
-   // Create demagnetizing field tensor
-   // arm::create_demagnetizing_field_tensor();
+	case(cubic):
+	  mars::create::internal::create_cubic_grain_structure();
+	  break;
 
-   return;
+	case(voronoi):
+	  //mars::create::internal::create_voronoi_grain_structure();
+	  break;
 
-}
+	case(single):
+	  mars::create::internal::create_single_grain();
+	  break;
 
-}
+	default:
+	  mars::create::internal::create_cubic_grain_structure();
+
+	}
+
+	return;
+
+      }
+
+    } // End of namespace internal
+
+  } // End of namespace create
+
+} // End of namespace mars

@@ -15,5 +15,7 @@
 # Scratch files
 *~
 
+# Mac files
+*.DS_Store
 # Executables
-arm
+mars
