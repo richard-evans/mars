@@ -368,7 +368,7 @@ public:
 
    // interface functions for setting separator characters
    void set_unit_separator(std::string unit_separator_character);
-   void set_comment_separator(std::string unit_separator_character);
+   void set_comment_separator(std::string comment_separator_character);
    void set_value_separator(std::string unit_separator_character);
    void set_keyword_separator(std::string unit_separator_character);
 

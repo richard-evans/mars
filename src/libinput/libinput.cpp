@@ -144,6 +144,7 @@ parameters::parameters(){
 
   // set default values
   parameters::set_value_separator("=");
+  parameters::set_comment_separator("#");
 
   return;
 
@@ -188,6 +189,18 @@ void parameters::set_value_separator(std::string value_separator_character){
    parameters::value_separator = value_separator_character;
 
    return;
+
+}
+
+//---------------------------------------------------------------
+// Function to set the comment character (default "#" )
+//---------------------------------------------------------------
+void parameters::set_comment_separator(std::string comment_separator_character){
+
+  // set class value separator
+  parameters::comment_character = comment_separator_character;
+
+  return;
 
 }
 
@@ -242,7 +255,7 @@ bool parameters::parse(std::ifstream& ifile){
    }
    
    // declare line counter variable
-   int line_counter = 0;
+   int line_counter = 1;
    
    // declare line as string
    std::string line;
@@ -298,13 +311,18 @@ std::string parameters::get_manual(std::string keyword){
 
 bool parameters::parse_line(std::string& line, int line_number){
 
+   // Ignore empty lines
+   std::string empty = "";
+   if(line == empty) return false;
+
    // bool to check for parse error
    bool parse_error=false;
 
-   // loop over all lines in file
-
    // load line from file and extract contents
    libinput::line_variables_t line_contents = extract_parameters_from_line(line,line_number);
+
+   // Check for empty keyword (usually comment line) and ignore
+   if(line_contents.keyword == empty) return false;
 
    // print lines to screen if verbose output requested
    if(parameters::verbose){
@@ -384,9 +402,9 @@ libinput::line_variables_t parameters::extract_parameters_from_line(std::string&
 
    // Set key characters for separating string to components
    const char* commentc = parameters::comment_character.c_str();
-   const char* unitc    = parameters::unit_separator.c_str();     // Value identifier
-   const char* valuec   = parameters::value_separator.c_str();    // Unit identifier
-   const char* keywordc = parameters::keyword_separator.c_str();   // Comment identifier
+   const char* unitc    = parameters::unit_separator.c_str();
+   const char* valuec   = parameters::value_separator.c_str();
+   const char* keywordc = parameters::keyword_separator.c_str();
 
    // Declare variable to string container index
    unsigned int idx = 0;
